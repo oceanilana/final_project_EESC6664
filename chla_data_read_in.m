@@ -38,7 +38,7 @@ T = sortrows(T, 'datenum');
 
 
 
-%% plot Chlorophyll Files 
+%% plot Chlorophyll Files (to make sure everything read in properly!)
 
     % Select the year and month to plot
     chl_data = T.chla{T.Year == 2024 & T.Month == 6};
@@ -51,7 +51,7 @@ T = sortrows(T, 'datenum');
     [lon, lat] = meshgrid(lon, lat); % Use meshgrid because the lats and lons are stored as vectors above
     pcolorm(lat, lon, log10(chl_data'));
     load coastlines;
-    plotm(coastlat, coastlon, 'k');
+    plotm(coastlat, coastlon, 'k');o
     colormap(cmocean('algae'))
     hcb = colorbar('southoutside');
     xlabel(" chl-a mg/L")
