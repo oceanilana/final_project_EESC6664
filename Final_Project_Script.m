@@ -13,38 +13,25 @@ load(fullfile(folder, 'lon'));
 %% Time Series
 
 % global monthly average SST 
-% SST_Global = cellfun(@(x) mean(x(:), 'omitnan'), SST.sst);
-% Chl_Global = cellfun(@(x) mean(x(:), 'omitnan'), T.chla);
+SST_Global = cellfun(@(x) mean(x(:), 'omitnan'), SST.sst);
+Chl_Global = cellfun(@(x) mean(x(:), 'omitnan'), T.chla);
+% SST_Global = cellfun(@(x) mean(x(:), 'omitnan'), sst_data.sst);
+% Chl_Global = cellfun(@(x) mean(x(:), 'omitnan'), chl_data.chla);
 
-SST_Global = cellfun(@(x) mean(x(:), 'omitnan'), sst_table.sst);
-Chl_Global = cellfun(@(x) mean(x(:), 'omitnan'), chl_table.chla);
 
 %% global timer series 
 figure(1); clf;
 
-% yyaxis left
-% plot(SST.datenum, SST_Global, 'LineWidth', 2, 'Color', "r"); 
-% ylabel('SST (°C)');
-% set(gca, 'YColor', "r"); 
-% 
-% yyaxis right
-% plot(T.datenum, Chl_Global, 'LineWidth', 2, 'Color', [0 0.4 0.3]); % Green
-% ylabel('Chl-A (mg/L)');
-% set(gca, 'YColor', [0 0.4 0.3]); % Matches axis color to line
-% 
-% 
-% datetick('x', 28)
-% xlabel('Time');
-% title('Global SST and Chlorophyll-A Trends');
-
 
 yyaxis left
-plot(sst_table.datenum, SST_Global, 'LineWidth', 2, 'Color', "r"); 
+plot(SST.datenum, SST_Global, 'LineWidth', 2, 'Color', "r"); 
+% plot(sst_data.datenum, SST_Global, 'LineWidth', 2, 'Color', "r"); 
 ylabel('SST (°C)');
 set(gca, 'YColor', "r"); 
 
 yyaxis right
-plot(chl_table.datenum, Chl_Global, 'LineWidth', 2, 'Color', [0 0.4 0.3]); % Green
+plot(T.datenum, Chl_Global, 'LineWidth', 2, 'Color', [0 0.4 0.3]); % Green
+%plot(chl_data.datenum, Chl_Global, 'LineWidth', 2, 'Color', [0 0.4 0.3]); % Green
 ylabel('Chl-A (mg/L)');
 set(gca, 'YColor', [0 0.4 0.3]); % Matches axis color to line
 
@@ -57,41 +44,8 @@ title('Global SST and Chlorophyll-A Trends');
 
 
 
-% nMonths = height(SST);
-% 
-% SST_Eq = nan(nMonths, 1);
-% SST_Mid = nan(nMonths, 1);
-% SST_High = nan(nMonths, 1);
-% 
-% Chl_Eq = nan(nMonths, 1);
-% Chl_Mid = nan(nMonths, 1);
-% Chl_High = nan(nMonths, 1);
-% 
-% 
-% lat = sort(lat, 'descend');
-% idx_eq   = find(lat(:,1) >= -5 & lat(:,1) <= 5);
-% idx_mid  = find(lat(:,1) >= 30 & lat(:,1) <= 60);
-% idx_high = find(lat(:,1) >= 60 & lat(:,1) <= 90);
-% 
-% 
-% for i = 1:nMonths
-%     SST_i = SST.sst{i}; 
-%     Chl_i = T.chla{i}; 
-% 
-%     zonalSST = mean(SST_i, 2, 'omitnan');
-%     zonalChl = mean(Chl_i, 2, 'omitnan');
-% 
-% 
-%     SST_Eq(i)   = mean(zonalSST(idx_eq), 'omitnan');
-%     SST_Mid(i)  = mean(zonalSST(idx_mid), 'omitnan');
-%     SST_High(i) = mean(zonalSST(idx_high), 'omitnan');
-% 
-%     Chl_Eq(i)   = mean(zonalChl(idx_eq), 'omitnan');
-%     Chl_Mid(i)  = mean(zonalChl(idx_mid), 'omitnan');
-%     Chl_High(i) = mean(zonalChl(idx_high), 'omitnan');
-% end
-
-nMonths = height(sst_table);
+nMonths = height(SST);
+% nMonths = height(sst_data);
 
 SST_Eq = nan(nMonths, 1);
 SST_Mid = nan(nMonths, 1);
@@ -102,18 +56,19 @@ Chl_Mid = nan(nMonths, 1);
 Chl_High = nan(nMonths, 1);
 
 
-lat = sort(lat, 'descend');
 idx_eq   = find(lat(:,1) >= -5 & lat(:,1) <= 5);
 idx_mid  = find(lat(:,1) >= 30 & lat(:,1) <= 59);
 idx_high = find(lat(:,1) >= 60 & lat(:,1) <= 90);
 
 
 for i = 1:nMonths
-    SST_i = sst_table.sst{i}; 
-    Chl_i = chl_table.chla{i}; 
+    SST_i = SST.sst{i}; 
+    Chl_i = T.chla{i};
+    % SST_i = sst_data.sst{i}; 
+    % Chl_i = chl_data.chla{i}; 
     
-    zonalSST = mean(SST_i, 2, 'omitnan');
-    zonalChl = mean(Chl_i, 2, 'omitnan');
+    zonalSST = mean(SST_i, 1, 'omitnan');
+    zonalChl = mean(Chl_i, 1, 'omitnan');
     
   
     SST_Eq(i)   = mean(zonalSST(idx_eq), 'omitnan');
@@ -125,38 +80,109 @@ for i = 1:nMonths
     Chl_High(i) = mean(zonalChl(idx_high), 'omitnan');
 end
 
-
+%%
 
 % Plotting 
 figure(2); clf;
 
-subplot(1,3,1);
+subplot(3,1,1);
 yyaxis left;  
-plot(sst_table.datenum, SST_Eq, 'LineWidth', 1.5); 
+plot(SST.datenum, SST_Eq, 'LineWidth', 1.5, "Color", "r"); 
+% plot(sst_data.datenum, SST_Eq, 'LineWidth', 1.5); 
 ylabel('SST (^oC)');
+set(gca, 'YColor', "r"); 
+
 yyaxis right; 
-plot(chl_table.datenum, Chl_Eq, 'LineWidth', 1.5); 
+plot(T.datenum, Chl_Eq, 'LineWidth', 1.5, "Color", [0 0.4 0.3]); 
+% plot(chl_data.datenum, Chl_Eq, 'LineWidth', 1.5); 
 ylabel('Chl-A (mg/L)');
+set(gca, 'YColor', [0 0.4 0.3]);
 title('Equator (5°S - 5°N)');
 datetick('x', 28);
 
-subplot(1,3,2);
+subplot(3,1,2);
 yyaxis left;  
-plot(sst_table.datenum, SST_Mid, 'LineWidth', 1.5); 
+plot(SST.datenum, SST_Mid, 'LineWidth', 1.5, "Color", "r"); 
+% plot(sst_data.datenum, SST_Mid, 'LineWidth', 1.5); 
 ylabel('SST (^oC)');
+set(gca, 'YColor', "r"); 
+
 yyaxis right; 
-plot(chl_table.datenum, Chl_Mid, 'LineWidth', 1.5); 
+plot(T.datenum, Chl_Mid, 'LineWidth', 1.5, "Color", [0 0.4 0.3]); 
+% plot(chl_data.datenum, Chl_Mid, 'LineWidth', 1.5); 
 ylabel('Chl-A (mg/L)');
+set(gca, 'YColor', [0 0.4 0.3]);
 title('Mid Latidue (30° - 59°N)');
 datetick('x', 28);
 
 
-subplot(1,3,3);
+subplot(3,1,3);
 yyaxis left;  
-plot(sst_table.datenum, SST_High, 'LineWidth', 1.5); 
+plot(SST.datenum, SST_High, 'LineWidth', 1.5, "Color", "r"); 
+% plot(sst_data.datenum, SST_High, 'LineWidth', 1.5); 
 ylabel('SST (^oC)');
+set(gca, 'YColor', "r"); 
+
 yyaxis right; 
-plot(chl_table.datenum, Chl_High, 'LineWidth', 1.5); 
+plot(T.datenum, Chl_High, 'LineWidth', 1.5, "Color", [0 0.4 0.3]); 
+% plot(chl_data.datenum, Chl_High, 'LineWidth', 1.5); 
 ylabel('Chl-A (mg/L)');
+set(gca, 'YColor', [0 0.4 0.3]);
 title('High Latiude (60° - 90°N)');
 datetick('x', 28);
+
+
+%% %% Correlation yippee
+% % % making arrays 
+[nLon, nLat] = size(SST.sst{1}); 
+monthly_maps_r = nan(nLon, nLat, 12); % For correlation
+monthly_maps_p = nan(nLon, nLat, 12); % For significance
+% loop through each month
+for m = 1:12
+    %index each month
+    idx_month = find(SST.Month == m);
+
+    % 3-d matrix adds the monthly data onto the 3rd dimension - time for each year
+    sst_monthly = cat(3, SST.sst{idx_month}); 
+    chl_monthly = cat(3, T.chla{idx_month});  
+
+    % nested for loops, going through eah pixel
+    for i = 1:nLon
+        for j = 1:nLat
+            % for each month it takes the grid cell, and the 5 values
+            % across the years and turns it into a 5x1
+            sst_monthly_flat = squeeze(sst_monthly(i, j, :));
+            chl_monthly_flat = squeeze(chl_monthly(i, j, :));
+
+
+            % Return both r and p
+            [r, p] = corr(sst_monthly_flat, chl_monthly_flat, 'rows', 'complete');
+
+            % Store them in their respective maps
+            monthly_maps_r(i, j, m) = r;
+            monthly_maps_p(i, j, m) = p;
+            
+        end
+    end
+    fprintf('Finished month %d of 12\n', m);
+end
+
+% correlation if p < 0.05
+significant_r = monthly_maps_r;
+significant_r(monthly_maps_p > 0.05) = NaN;
+
+filename = 'SST_CHL_Correlation_Results.mat';
+save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/SST_CHL_Correlation_Results','monthly_maps_r', 'monthly_maps_p', '-mat', '-v7.3');
+fprintf('Data successfully saved to %s\n', filename);
+
+
+%%
+figure(3); clf;
+imagesc(1:12, lat(:), r); 
+set(gca, 'YDir', 'normal'); 
+colormap(cmocean('balance'))
+hcb = colorbar('southoutside');
+xlabel('Month'); 
+ylabel('Latitude');
+set(gca, 'XTick', 1:12, 'XTickLabel', {'J','F','M','A','M','J','J','A','S','O','N','D'});
+title('Seasonal Correlation of SST/Chl-a ');
