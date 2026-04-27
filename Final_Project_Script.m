@@ -1,14 +1,15 @@
 %% Read in Data Files 
 % addpath(genpath('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project'))
 % folder = '/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project';
+addpath(genpath('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664'))
 
+run("chla_data_read_in.m")
+run("sst_data_read_in.m")
 
-
-
-load(fullfile(folder, 'sst_table')); 
-load(fullfile(folder, 'chl_table'));
-load(fullfile(folder, 'lat'));
-load(fullfile(folder, 'lon'));
+% load(fullfile(folder, 'sst_table')); 
+% load(fullfile(folder, 'chl_table'));
+% load(fullfile(folder, 'lat'));
+% load(fullfile(folder, 'lon'));
 
 
 
@@ -171,7 +172,7 @@ for m = 1:12
     sst_c(nan_mask) = 0;
     chl_c(nan_mask) = 0;
 
-    % correlation + p-value, all pixels at once using matrix math instead
+    % correlation and p-value calculation all pixels at once using matrix math instead
     % of looping over pixel by pixel. 
     r_vec = sum(sst_c .* chl_c, 1) ./ sqrt(sum(sst_c.^2, 1) .* sum(chl_c.^2, 1));
     t_stat = r_vec .* sqrt((n_valid - 2) ./ (1 - r_vec.^2));
@@ -187,7 +188,7 @@ end
 significant_r = monthly_maps_r;
 significant_r(monthly_maps_p > 0.05) = NaN;
 
-%% Plot global map of correlation for each month
+%% Plot global map of correlation for each month (only significant)
 
 month_names = {'January', 'February', 'March', 'April', 'May', 'June', ...
                'July', 'August', 'September', 'October', 'November', 'December'};
@@ -205,6 +206,22 @@ for m = 1:12
     xlabel(hcb, 'Pearson r')
     title(['SST vs Chl-a Correlation (', month_names{m}, ')']);
 end
+
+
+%% Plot global map of correlation for each month (all)
+
+    figure();
+    axesm('MapProjection', 'robinson', 'Grid', 'on');
+    framem on;
+    pcolorm(lat, lon, monthly_maps_r(:,:,12)');
+    load coastlines;
+    plotm(coastlat, coastlon, 'k');
+    colormap(cmocean('balance'))
+    clim([-1 1]);
+    hcb = colorbar('southoutside');
+    xlabel(hcb, 'Pearson r')
+    title('SST vs Chl-a Correlation December');
+
 %%
 figure(3); clf;
 imagesc(1:12, lat(:), r); 

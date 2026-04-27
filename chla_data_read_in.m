@@ -47,25 +47,25 @@ chl_table = table(years, months, datenums, chla, ...
 chl_table = sortrows(chl_table, 'datenum');
 %%
 
-%   save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/Chl', 'chl_table', '-mat', '-v7.3')
-tic
-save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'chl_table', '-mat', '-v7.3')
-toc
+% %   save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/Chl', 'chl_table', '-mat', '-v7.3')
+% tic
+% save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'chl_table', '-mat', '-v7.3')
+% toc
 %% plot Chlorophyll Files (to make sure everything read in properly!)
-
-    % Select the year and month to plot
-    chl_data = chl_table.chla{chl_table.Year == 2024 & chl_table.Month == 6};
-   
-    
-    % Global Map for select month data
-    figure();
-    axesm('MapProjection', 'robinson', 'Grid', 'on');  
-    framem on;  
-    %[lon, lat] = meshgrid(lon, lat); % Use meshgrid because the lats and lons are stored as vectors above
-    pcolorm(lat, lon, log10(chl_data'));
-    load coastlines;
-    plotm(coastlat, coastlon, 'k');
-    colormap(cmocean('algae'))
-    hcb = colorbar('southoutside');
-    xlabel(" chl-a mg/L")
-    title('Monthly Chlorophyll-a (June 2024)');
+    % 
+    % % Select the year and month to plot
+    % chl_data = chl_table.chla{chl_table.Year == 2024 & chl_table.Month == 6};
+    % 
+    % 
+    % % Global Map for select month data
+    % figure();
+    % axesm('MapProjection', 'robinson', 'Grid', 'on');  
+    % framem on;  
+    % %[lon, lat] = meshgrid(lon, lat); % Use meshgrid because the lats and lons are stored as vectors above
+    % pcolorm(lat, lon, log10(chl_data'));
+    % load coastlines;
+    % plotm(coastlat, coastlon, 'k');
+    % colormap(cmocean('algae'))
+    % hcb = colorbar('southoutside');
+    % xlabel(" chl-a mg/L")
+    % title('Monthly Chlorophyll-a (June 2024)');
