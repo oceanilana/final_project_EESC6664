@@ -12,6 +12,12 @@ lon = ncread(fullfile(folder, files(1).name), 'lon');
 %save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/lat', 'lat', '-mat', '-v7.3')
 %save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/lon', 'lon', '-mat', '-v7.3')
 
+
+tic
+save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'lon', '-mat', '-v7.3')
+save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'lat', '-mat', '-v7.3')
+toc
+
 %% allocate table variables
 n = numel(files);
 years    = nan(n,1);
@@ -50,6 +56,8 @@ sst_table = sortrows(sst_table, 'datenum');
 %%
 
 %   save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/Chl', 'sst_table', '-mat', '-v7.3')
+
+save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'sst_table', '-mat', '-v7.3')
 
 %% plot Chlorophyll Files (to make sure everything read in properly!)
 

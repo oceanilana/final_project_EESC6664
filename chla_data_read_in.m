@@ -48,7 +48,9 @@ chl_table = sortrows(chl_table, 'datenum');
 %%
 
 %   save('/Users/celiam-b/Desktop/Grad School/Y1/Data Visualization/Final Project/Chl', 'chl_table', '-mat', '-v7.3')
-
+tic
+save('/Users/ilanajacobs/Palevsky_Lab/Classes/EESC6664/Chl', 'chl_table', '-mat', '-v7.3')
+toc
 %% plot Chlorophyll Files (to make sure everything read in properly!)
 
     % Select the year and month to plot
